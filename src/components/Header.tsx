@@ -69,34 +69,34 @@ const Header: React.FC = () => {
     { to: '/blog', label: 'Blog', icon: <svg className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg> },
   ];
 
-  const visibleItems = navItems.slice(0, -1); // All items except the last one for "More" dropdown
-  const dropdownItems = [navItems[navItems.length - 1]]; // Only the last item ("Blog") in dropdown initially
+  const visibleItems = navItems.slice(0, 4); // Show only first 4 items on desktop, rest in dropdown
+  const dropdownItems = navItems.slice(4); // Remaining items in dropdown
 
   return (
     <header
       className={clsx(
-        'bg-gradient-to-r from-blue-800 to-gray-900 dark:from-blue-900 dark:to-gray-950',
-        'text-white py-3 sm:py-4 fixed w-full top-0 shadow-xl z-50 font-inter'
+        'bg-gradient-to-r from-blue-800 via-blue-900 to-gray-900 dark:from-blue-950 dark:via-blue-900 dark:to-gray-950',
+        'text-white py-2 sm:py-3 lg:py-4 fixed w-full top-0 shadow-2xl z-50 font-inter transition-all duration-500'
       )}
     >
-      <nav className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
+      <nav className="container mx-auto flex justify-between items-center px-3 sm:px-4 lg:px-6 xl:px-8">
         {/* Logo and Avatar */}
         <NavLink to="/about" className="flex items-center space-x-2 sm:space-x-3 group">
           <img
             src={myAvatar}
             alt="Mahmoud Yousefi"
             className={clsx(
-              'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full border-2 object-cover shadow-md',
-              'border-blue-200 dark:border-blue-300 group-hover:scale-110 group-hover:shadow-blue-300/50',
-              'transition-all duration-300'
+              'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full border-2 object-cover shadow-lg',
+              'border-blue-300 dark:border-blue-400 group-hover:scale-105 group-hover:shadow-blue-400/60',
+              'transition-all duration-500 ease-out'
             )}
             onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/40?text=MY')}
           />
           <div
             className={clsx(
-              'text-lg sm:text-xl md:text-2xl font-semibold tracking-tight',
-              'text-white dark:text-gray-100 group-hover:text-blue-200 dark:group-hover:text-blue-100',
-              'transition-colors duration-300'
+              'text-base sm:text-lg md:text-xl lg:text-2xl font-bold tracking-tight',
+              'text-white dark:text-gray-100 group-hover:text-blue-300 dark:group-hover:text-blue-200',
+              'transition-colors duration-500'
             )}
           >
             Mahmoud Yousefi
@@ -104,100 +104,108 @@ const Header: React.FC = () => {
         </NavLink>
 
         {/* Desktop Navigation and Theme Toggle */}
-        <div className="flex items-center space-x-4 sm:space-x-6">
-          <div className="relative">
-            <ul ref={navRef} className="hidden md:flex space-x-4 lg:space-x-6 items-center">
-              {visibleItems.map(({ to, label, icon }) => (
-                <li key={to} className="relative group flex items-center">
-                  <NavLink
-                    to={to}
-                    className={({ isActive }) =>
-                      clsx(
-                        'flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm lg:text-base font-medium uppercase tracking-wide',
-                        isActive
-                          ? 'text-blue-300 dark:text-blue-200'
-                          : 'text-gray-100 dark:text-gray-200 hover:text-blue-300 dark:hover:text-blue-200',
-                        'transition-all duration-300'
-                      )
-                    }
-                    aria-label={label}
-                  >
-                    {icon}
-                    <span>{label}</span>
-                    <span
-                      className={clsx(
-                        'absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-300 to-blue-500 dark:from-blue-200 dark:to-blue-400',
-                        'transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left',
-                        { 'scale-x-100': window.location.pathname === to }
-                      )}
-                    />
-                  </NavLink>
-                </li>
-              ))}
-              {navItems.length > 4 && ( // Show "More" dropdown if more than 4 items
-                <li className="relative group">
-                  <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        <div className="flex items-center space-x-3 sm:space-x-4 lg:space-x-6">
+          <ul ref={navRef} className="hidden lg:flex space-x-3 xl:space-x-5 items-center">
+            {visibleItems.map(({ to, label, icon }) => (
+              <li key={to} className="relative group flex items-center">
+                <NavLink
+                  to={to}
+                  className={({ isActive }) =>
+                    clsx(
+                      'flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm xl:text-base font-semibold tracking-wide',
+                      isActive
+                        ? 'text-blue-300 dark:text-blue-200'
+                        : 'text-gray-100 dark:text-gray-200 hover:text-blue-300 dark:hover:text-blue-200',
+                      'transition-all duration-300'
+                    )
+                  }
+                  aria-label={label}
+                >
+                  {icon}
+                  <span>{label}</span>
+                  <span
                     className={clsx(
-                      'flex items-center space-x-1 text-xs sm:text-sm lg:text-base font-medium uppercase tracking-wide',
-                      'text-gray-100 dark:text-gray-200 hover:text-blue-300 dark:hover:text-blue-200',
-                      'transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded'
+                      'absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-400 to-blue-600 dark:from-blue-300 dark:to-blue-500',
+                      'transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-center',
+                      { 'scale-x-100': window.location.pathname === to }
                     )}
-                    aria-label="More navigation items"
-                    aria-expanded={isDropdownOpen}
-                    aria-controls="dropdown-menu"
-                  >
-                    <span>More</span>
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  <ul
-                    ref={dropdownRef}
-                    id="dropdown-menu"
+                  />
+                </NavLink>
+              </li>
+            ))}
+            {dropdownItems.length > 0 && (
+              <li className="relative group">
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className={clsx(
+                    'flex items-center space-x-1 text-xs sm:text-sm xl:text-base font-semibold tracking-wide',
+                    'text-gray-100 dark:text-gray-200 hover:text-blue-300 dark:hover:text-blue-200',
+                    'transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 dark:focus:ring-offset-gray-950'
+                  )}
+                  aria-label="More navigation items"
+                  aria-expanded={isDropdownOpen}
+                  aria-controls="dropdown-menu"
+                >
+                  <span>More</span>
+                  <svg
                     className={clsx(
-                      'absolute right-0 mt-2 w-48 bg-gray-800 dark:bg-gray-900 rounded-md shadow-lg',
-                      'flex flex-col space-y-2 py-2 transition-all duration-300',
-                      isDropdownOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+                      'w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300',
+                      isDropdownOpen ? 'rotate-180' : ''
                     )}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
                   >
-                    {dropdownItems.map(({ to, label, icon }) => (
-                      <li key={to}>
-                        <NavLink
-                          to={to}
-                          className={({ isActive }) =>
-                            clsx(
-                              'flex items-center space-x-2 px-4 py-2 text-sm font-medium',
-                              isActive
-                                ? 'text-blue-300 dark:text-blue-200'
-                                : 'text-gray-100 dark:text-gray-200 hover:text-blue-300 dark:hover:text-blue-200',
-                              'transition-colors duration-200'
-                            )
-                          }
-                          onClick={() => setIsDropdownOpen(false)}
-                          aria-label={label}
-                        >
-                          {icon}
-                          <span>{label}</span>
-                        </NavLink>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              )}
-            </ul>
-          </div>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <ul
+                  ref={dropdownRef}
+                  id="dropdown-menu"
+                  className={clsx(
+                    'absolute right-0 mt-3 w-56 bg-gray-800/95 dark:bg-gray-900/95 rounded-xl shadow-2xl backdrop-blur-sm',
+                    'flex flex-col space-y-1 py-3 transition-all duration-300 ease-in-out',
+                    isDropdownOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
+                  )}
+                >
+                  {dropdownItems.map(({ to, label, icon }) => (
+                    <li key={to}>
+                      <NavLink
+                        to={to}
+                        className={({ isActive }) =>
+                          clsx(
+                            'flex items-center space-x-2 px-4 py-2 text-sm font-medium',
+                            isActive
+                              ? 'text-blue-300 dark:text-blue-200 bg-blue-600/20 dark:bg-blue-700/20'
+                              : 'text-gray-100 dark:text-gray-200 hover:text-blue-300 dark:hover:text-blue-200 hover:bg-blue-600/10 dark:hover:bg-blue-700/10',
+                            'transition-all duration-200 rounded-md mx-2'
+                          )
+                        }
+                        onClick={() => setIsDropdownOpen(false)}
+                        aria-label={label}
+                      >
+                        {icon}
+                        <span>{label}</span>
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            )}
+          </ul>
           <button
             onClick={toggleTheme}
             className={clsx(
-              'p-1 sm:p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+              'p-1.5 sm:p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
               'hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300',
               'focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-950'
             )}
             aria-label={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
           >
             <svg
-              className={clsx('w-5 h-5 sm:w-6 sm:h-6 transform transition-transform duration-300', theme === 'dark' ? 'rotate-180' : '')}
+              className={clsx('w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-500', theme === 'dark' ? '-rotate-90' : '')}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -210,43 +218,42 @@ const Header: React.FC = () => {
               )}
             </svg>
           </button>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className={clsx(
-            'md:hidden p-2 rounded-md bg-blue-600 dark:bg-blue-500 text-white dark:text-gray-100',
-            'hover:bg-blue-700 dark:hover:bg-blue-600 animate-[pulse_2s_ease-in-out_infinite]',
-            'focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-gray-900 dark:focus:ring-offset-gray-950'
-          )}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle navigation menu"
-          aria-expanded={isMenuOpen}
-        >
-          <svg
-            className="w-5 h-5 sm:w-6 sm:h-6 transform transition-all duration-300"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+          {/* Mobile Menu Button */}
+          <button
+            className={clsx(
+              'lg:hidden p-1.5 sm:p-2 rounded-lg bg-blue-600 dark:bg-blue-500 text-white dark:text-gray-100',
+              'hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-300',
+              'focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 dark:focus:ring-offset-gray-950'
+            )}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMenuOpen}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d={isMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
-              className={clsx('transition-all duration-300', isMenuOpen ? 'rotate-90' : '')}
-            />
-          </svg>
-        </button>
+            <svg
+              className="w-5 h-5 sm:w-6 sm:h-6 transition-all duration-500 ease-out"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d={isMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
+                className={clsx('transition-all duration-500', isMenuOpen ? 'rotate-90' : '')}
+              />
+            </svg>
+          </button>
+        </div>
 
         {/* Mobile Navigation */}
         <ul
           className={clsx(
-            'absolute left-0 w-full bg-gray-900 dark:bg-gray-950 text-white dark:text-gray-100',
-            'flex flex-col items-center space-y-4 py-8 md:hidden',
-            'transition-all duration-300 ease-in-out shadow-lg',
-            isMenuOpen ? 'top-14 sm:top-16 opacity-100 translate-y-0' : 'top-14 sm:top-16 opacity-0 -translate-y-4 pointer-events-none'
+            'absolute left-0 w-full bg-gray-900/95 dark:bg-gray-950/95 text-white dark:text-gray-100',
+            'flex flex-col items-center space-y-4 py-6 sm:py-8 md:py-10 lg:hidden',
+            'transition-all duration-500 ease-in-out shadow-2xl backdrop-blur-sm',
+            isMenuOpen ? 'top-12 sm:top-14 md:top-16 opacity-100 translate-y-0' : 'top-12 sm:top-14 md:top-16 opacity-0 -translate-y-6 pointer-events-none'
           )}
         >
           {navItems.map(({ to, label, icon }) => (
@@ -255,8 +262,11 @@ const Header: React.FC = () => {
                 to={to}
                 className={({ isActive }) =>
                   clsx(
-                    'flex items-center space-x-2 text-base sm:text-lg font-medium uppercase tracking-wide transition-colors duration-200',
-                    isActive ? 'text-blue-300 dark:text-blue-200' : 'text-gray-100 dark:text-gray-200 hover:text-blue-300 dark:hover:text-blue-200'
+                    'flex items-center space-x-2 text-sm sm:text-base md:text-lg font-semibold tracking-wide',
+                    isActive
+                      ? 'text-blue-300 dark:text-blue-200 bg-blue-600/20 dark:bg-blue-700/20'
+                      : 'text-gray-100 dark:text-gray-200 hover:text-blue-300 dark:hover:text-blue-200 hover:bg-blue-600/10 dark:hover:bg-blue-700/10',
+                    'transition-all duration-300 px-4 py-2 rounded-md'
                   )
                 }
                 onClick={() => setIsMenuOpen(false)}
