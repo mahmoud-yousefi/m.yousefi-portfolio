@@ -117,7 +117,7 @@ const Footer: React.FC = () => {
         if (ref) observer.unobserve(ref);
       });
     };
-  }, []);
+  }, [i18n.language]);
 
   return (
     <footer
