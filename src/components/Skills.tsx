@@ -6,11 +6,13 @@ import {
   FaBootstrap, FaCodeBranch, FaChartBar, FaVial, FaCircleCheck
 } from 'react-icons/fa6';
 import { FaJs, FaPhp, FaNodeJs, FaLess, FaTh, FaThLarge, FaCogs, FaExchangeAlt } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 
 // Skill data with react-icons components and custom colors
 const skillCategories = [
   {
-    category: 'Programming & Scripting',
+    categoryKey: 'programmingScripting',
     skills: [
       { name: 'JavaScript', icon: FaJs, color: '#F7DF1E', darkColor: '#FBBF24' },
       { name: 'TypeScript', icon: FaJs, color: '#3178C6', darkColor: '#60A5FA' },
@@ -19,7 +21,7 @@ const skillCategories = [
     ],
   },
   {
-    category: 'Frameworks & Libraries',
+    categoryKey: 'frameworksLibraries',
     skills: [
       { name: 'ReactJS', icon: FaReact, color: '#61DAFB', darkColor: '#7DD3FC' },
       { name: 'Redux-Toolkit', icon: FaReact, color: '#61DAFB', darkColor: '#7DD3FC' },
@@ -37,14 +39,14 @@ const skillCategories = [
     ],
   },
   {
-    category: 'GIS Technologies',
+    categoryKey: 'gisTechnologies',
     skills: [
       { name: 'OpenLayers', icon: FaMap, color: '#1F6B75', darkColor: '#2DD4BF' },
       { name: 'Maplibre', icon: FaGlobe, color: '#4A90E2', darkColor: '#60A5FA' },
     ],
   },
   {
-    category: 'Tools & Technologies',
+    categoryKey: 'toolsTechnologies',
     skills: [
       { name: 'Git', icon: FaGitAlt, color: '#F05032', darkColor: '#F87171' },
       { name: 'GitHub', icon: FaGithub, color: '#181717', darkColor: '#4B5563' },
@@ -60,7 +62,7 @@ const skillCategories = [
     ],
   },
   {
-    category: 'Web Development',
+    categoryKey: 'webDevelopment',
     skills: [
       { name: 'HTML & CSS', icon: FaHtml5, color: '#E34F26', darkColor: '#F87171' },
       { name: 'SASS', icon: FaSass, color: '#CC6699', darkColor: '#F472B6' },
@@ -73,7 +75,7 @@ const skillCategories = [
     ],
   },
   {
-    category: 'Testing & Validation Libraries',
+    categoryKey: 'testingValidation',
     skills: [
       { name: 'MVC', icon: FaCodeBranch, color: '#6B7280', darkColor: '#9CA3AF' },
       { name: 'D3.js', icon: FaChartBar, color: '#F9A03C', darkColor: '#FBBF24' },
@@ -83,7 +85,7 @@ const skillCategories = [
     ],
   },
   {
-    category: 'Other Skills',
+    categoryKey: 'otherSkills',
     skills: [
       { name: 'Solid Principles', icon: FaCogs, color: '#6B7280', darkColor: '#9CA3AF' },
       { name: 'REST API Development', icon: FaExchangeAlt, color: '#F97316', darkColor: '#FBBF24' },
@@ -92,25 +94,46 @@ const skillCategories = [
 ];
 
 const SkillCard = forwardRef(({ skill, index }, ref) => {
-  const Icon = skill.icon; // Store the icon component
+  const { i18n } = useTranslation();
+  const Icon = skill.icon;
   return (
     <div
       ref={ref}
-      className="group flex items-center bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 animate-[fadeInUp_0.8s_ease-out_forwards]"
-      style={{ animationDelay: `${index * 0.1}s` }}
+      className={clsx(
+        'group flex items-center bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 animate-[fadeInUp_0.8s_ease-out_forwards]',
+        i18n.language === 'fa' ? 'space-x-reverse space-x-3 sm:space-x-4' : 'space-x-3 sm:space-x-4'
+      )}
+      style={{ animationDelay: `${index * 0.1}s`, direction: /* i18n.language === 'fa' ? 'rtl' : */ 'ltr' }}
     >
-      <Icon
-        className={`text-2xl sm:text-3xl mr-3 sm:mr-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12 animate-[rotateIn_1.2s_ease-in-out_forwards] dark:[color:${skill.darkColor}]`}
-        style={{ color: skill.color, animationDelay: `${index * 0.1}s` }}
-      />
-      <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">
-        {skill.name}
-      </span>
+      {i18n.language === 'fa' ? (
+        <>
+          <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">{skill.name}</span>
+          <Icon
+            className={clsx(
+              'text-2xl sm:text-3xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12 animate-[rotateIn_1.2s_ease-in-out_forwards]',
+              `dark:[color:${skill.darkColor}]`
+            )}
+            style={{ color: skill.color, animationDelay: `${index * 0.1}s` }}
+          />
+        </>
+      ) : (
+        <>
+          <Icon
+            className={clsx(
+              'text-2xl sm:text-3xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12 animate-[rotateIn_1.2s_ease-in-out_forwards]',
+              `dark:[color:${skill.darkColor}]`
+            )}
+            style={{ color: skill.color, animationDelay: `${index * 0.1}s` }}
+          />
+          <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">{skill.name}</span>
+        </>
+      )}
     </div>
   );
 });
 
 const Skills = () => {
+  const { t, i18n } = useTranslation();
   const sectionRef = useRef(null);
   const canvasRef = useRef(null);
   const cardRefs = useRef(new Map());
@@ -223,12 +246,18 @@ const Skills = () => {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen bg-gradient-to-b from-gray-100 to-blue-50 dark:from-gray-900 dark:to-blue-950 relative overflow-hidden font-inter py-12 sm:py-16 lg:py-20"
+      className={clsx(
+        'min-h-screen relative overflow-hidden py-12 sm:py-16 lg:py-20',
+        i18n.language === 'fa'
+          ? 'bg-gradient-to-l from-gray-100 to-blue-50 dark:from-gray-900 dark:to-blue-950 font-vazirmatn'
+          : 'bg-gradient-to-r from-gray-100 to-blue-50 dark:from-gray-900 dark:to-blue-950 font-inter'
+      )}
       style={{
         backgroundImage:
           'radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.3) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 60%)',
         animation: 'gradientShift 20s ease infinite',
       }}
+      aria-label={t('skills.title')}
     >
       <canvas
         ref={canvasRef}
@@ -269,26 +298,32 @@ const Skills = () => {
       </style>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
         <h2
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8 sm:mb-12 lg:mb-16 animate-[fadeInUp_0.8s_ease-out] animate-[textGlow_3s_ease-in-out_infinite]"
+          className={clsx(
+            'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-8 sm:mb-12 lg:mb-16 animate-[fadeInUp_0.8s_ease-out] animate-[textGlow_3s_ease-in-out_infinite]',
+            i18n.language === 'fa' ? 'text-right' : 'text-left'
+          )}
           style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)' }}
         >
-          My Skills
+          {t('skills.title')}
         </h2>
         {skillCategories.map((category, catIndex) => (
-          <div key={category.category} className="mb-12">
+          <div key={category.categoryKey} className="mb-12">
             <h3
-              className="text-2xl sm:text-3xl font-semibold text-gray-800 dark:text-gray-200 mb-6 animate-[fadeInUp_0.8s_ease-out]"
+              className={clsx(
+                'text-2xl sm:text-3xl font-semibold text-gray-800 dark:text-gray-200 mb-6 animate-[fadeInUp_0.8s_ease-out]',
+                i18n.language === 'fa' ? 'text-right' : 'text-left'
+              )}
               style={{ animationDelay: `${catIndex * 0.2}s` }}
             >
-              {category.category}
+              {t(`skills.categories.${category.categoryKey}`)}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {category.skills.map((skill, index) => (
                 <SkillCard
-                  key={`${category.category}-${skill.name}`}
+                  key={`${category.categoryKey}-${skill.name}`}
                   skill={skill}
                   index={catIndex * 100 + index}
-                  ref={(el) => cardRefs.current.set(`${category.category}-${skill.name}`, el)}
+                  ref={(el) => cardRefs.current.set(`${category.categoryKey}-${skill.name}`, el)}
                 />
               ))}
             </div>

@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
-import clsx from 'clsx';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 import myAvatar from '../assets/IMG_20250327_031322_411.webp';
 
 const Hero: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
@@ -13,13 +15,17 @@ const Hero: React.FC = () => {
     <>
       <section
         className={clsx(
-          'min-h-screen bg-gradient-to-br from-blue-700 via-gray-800 to-blue-600 dark:from-blue-900 dark:via-gray-900 dark:to-blue-800',
-          'flex items-center justify-center relative overflow-hidden font-inter py-10 sm:py-12 lg:py-16'
+          'min-h-screen flex items-center justify-center relative overflow-hidden py-10 sm:py-12 lg:py-16',
+          i18n.language === 'fa'
+            ? 'bg-gradient-to-bl from-blue-700 via-gray-800 to-blue-600 dark:from-blue-900 dark:via-gray-900 dark:to-blue-800 font-vazirmatn'
+            : 'bg-gradient-to-br from-blue-700 via-gray-800 to-blue-600 dark:from-blue-900 dark:via-gray-900 dark:to-blue-800 font-inter'
         )}
         style={{
-          backgroundImage: 'radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.4) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.4) 0%, transparent 50%)',
+          backgroundImage:
+            'radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.4) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.4) 0%, transparent 50%)',
           animation: 'gradientShift 25s ease infinite',
         }}
+        aria-label={t('hero.title')}
       >
         <style>
           {`
@@ -50,11 +56,11 @@ const Hero: React.FC = () => {
           <button
             onClick={openModal}
             className="mx-auto mb-6 sm:mb-8 focus:outline-none"
-            aria-label="View Mahmoud Yousefi's profile picture"
+            aria-label={t('hero.avatarAria')}
           >
             <img
               src={myAvatar}
-              alt="Mahmoud Yousefi"
+              alt={t('hero.avatarAlt')}
               className={clsx(
                 'w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 mx-auto rounded-full border-4',
                 'border-blue-300 dark:border-blue-400 object-cover shadow-xl',
@@ -66,21 +72,28 @@ const Hero: React.FC = () => {
           <h1
             className={clsx(
               'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-blue-950 dark:text-white mb-4 sm:mb-6',
-              'animate-[fadeInUp_0.8s_ease-out]'
+              'animate-[fadeInUp_0.8s_ease-out]',
+              'text-center'
             )}
             style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.4)' }}
           >
-            Building Innovative Web & GIS Solutions
+            {t('hero.title')}
           </h1>
           <p
             className={clsx(
               'text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-8 sm:mb-10 lg:mb-12',
-              'animate-[fadeInUp_1s_ease-out]'
+              'animate-[fadeInUp_1s_ease-out]',
+              i18n.language === 'fa' ? 'text-right' : 'text-center'
             )}
           >
-            Hi, I’m Mahmoud Yousefi, a Full-Stack Developer crafting seamless, user-focused web applications and geospatial systems using React, TypeScript, and modern technologies.
+            {t('hero.description')}
           </p>
-          <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 lg:space-x-6">
+          <div
+            className={clsx(
+              'flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0',
+              i18n.language === 'fa' ? 'sm:flex-row-reverse sm:space-x-reverse sm:space-x-4 lg:space-x-6' : 'sm:space-x-4 lg:space-x-6'
+            )}
+          >
             <Link
               to="/contact"
               className={clsx(
@@ -89,9 +102,9 @@ const Hero: React.FC = () => {
                 'transition-all duration-300 animate-[pulse_2.5s_ease-in-out_infinite]',
                 'focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-offset-gray-900'
               )}
-              aria-label="Contact Mahmoud Yousefi"
+              aria-label={t('hero.contactAria')}
             >
-              Get in Touch
+              {t('hero.contactButton')}
             </Link>
             <Link
               to="/projects"
@@ -100,11 +113,12 @@ const Hero: React.FC = () => {
                 'py-2.5 px-6 sm:py-3 sm:px-8 rounded-full text-base sm:text-lg font-semibold',
                 'hover:bg-blue-300 dark:hover:bg-blue-400 hover:text-gray-900 dark:hover:text-gray-900 hover:scale-105',
                 'transition-all duration-300 animate-[pulse_2.5s_ease-in-out_infinite]',
-                'focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-offset-gray-900'
+                'focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-offset-gray-900',
+                i18n.language === 'fa' ? '!mr-4' : '!mx-4'
               )}
-              aria-label="View Mahmoud Yousefi's Projects"
+              aria-label={t('hero.projectsAria')}
             >
-              View My Projects
+              {t('hero.projectsButton')}
             </Link>
           </div>
         </div>
@@ -117,7 +131,7 @@ const Hero: React.FC = () => {
           onClick={closeModal}
           role="dialog"
           aria-modal="true"
-          aria-label="Enlarged profile picture"
+          aria-label={t('hero.modalAria')}
         >
           <div
             className="relative animate-[modalFadeIn_0.4s_ease-out]"
@@ -125,7 +139,7 @@ const Hero: React.FC = () => {
           >
             <img
               src={myAvatar}
-              alt="Mahmoud Yousefi Enlarged"
+              alt={t('hero.modalAlt')}
               className={clsx(
                 'w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[28rem] lg:h-[28rem] rounded-full object-cover border-4',
                 'border-blue-300 dark:border-blue-400 shadow-2xl'
@@ -135,10 +149,11 @@ const Hero: React.FC = () => {
             <button
               onClick={closeModal}
               className={clsx(
-                'absolute top-4 right-4 p-2 bg-gray-800/90 dark:bg-gray-700/90 text-white rounded-full',
-                'hover:bg-gray-700 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-black'
+                'absolute top-4 p-2 bg-gray-800/90 dark:bg-gray-700/90 text-white rounded-full',
+                'hover:bg-gray-700 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-black',
+                i18n.language === 'fa' ? 'left-4' : 'right-4'
               )}
-              aria-label="Close profile picture modal"
+              aria-label={t('hero.closeModalAria')}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

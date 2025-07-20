@@ -1,18 +1,20 @@
 import { useEffect, useRef } from 'react';
 import { FaGithub, FaLinkedin, FaEnvelope, FaTelegram, FaWhatsapp } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
 const Footer: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
   const contentRefs = useRef<(HTMLParagraphElement | HTMLUListElement | null)[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const socialLinks = [
-    { label: 'GitHub', url: 'https://github.com/mahmoud-yousefi', icon: <FaGithub className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
-    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/mahmood-yoosefi-1586a526b/', icon: <FaLinkedin className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
-    { label: 'WhatsApp', url: 'https://wa.me/09902635947', icon: <FaWhatsapp className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
-    { label: 'Telegram', url: 'https://t.me/UsefiMf14', icon: <FaTelegram className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
-    { label: 'Email', url: 'mailto:mahmoudyousefics@gmail.com', icon: <FaEnvelope className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
+    { label: t('footer.social.github'), url: 'https://github.com/mahmoud-yousefi', icon: <FaGithub className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
+    { label: t('footer.social.linkedin'), url: 'https://www.linkedin.com/in/mahmood-yoosefi-1586a526b/', icon: <FaLinkedin className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
+    { label: t('footer.social.whatsapp'), url: 'https://wa.me/09902635947', icon: <FaWhatsapp className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
+    { label: t('footer.social.telegram'), url: 'https://t.me/UsefiMf14', icon: <FaTelegram className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
+    { label: t('footer.social.email'), url: 'mailto:mahmoudyousefics@gmail.com', icon: <FaEnvelope className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300" /> },
   ];
 
   useEffect(() => {
@@ -121,8 +123,11 @@ const Footer: React.FC = () => {
     <footer
       ref={sectionRef}
       className={clsx(
-        'bg-gradient-to-t from-gray-900 via-gray-800 to-blue-900 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950',
-        'text-white py-12 sm:py-16 lg:py-20 relative overflow-hidden font-inter'
+        i18n.language === 'fa'
+          ? 'bg-gradient-to-l from-gray-900 via-gray-800 to-blue-900 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950'
+          : 'bg-gradient-to-r from-gray-900 via-gray-800 to-blue-900 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950',
+        'text-white py-12 sm:py-16 lg:py-20 relative overflow-hidden',
+        i18n.language === 'fa' ? 'font-vazirmatn' : 'font-inter'
       )}
     >
       <canvas
@@ -159,39 +164,57 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
         <div className="text-center mb-8 sm:mb-12">
           <h2
-            className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-100 mb-4 animate-[textGlow_3s_ease-in-out_infinite]"
+            className={clsx(
+              'text-2xl sm:text-3xl md:text-4xl font-bold text-gray-100 mb-4 animate-[textGlow_3s_ease-in-out_infinite]',
+              'text-center'
+            )}
             style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)' }}
           >
-            Connect with Me
+            {t('footer.connect')}
           </h2>
           <p
             ref={(el) => (contentRefs.current[0] = el)}
             className={clsx(
               'text-base sm:text-lg md:text-xl text-gray-200 dark:text-gray-300 mb-6 sm:mb-8 opacity-0',
+              'text-center',
               'animate-[fadeInUp_0.8s_ease-out]'
             )}
           >
-            Empowering the future through innovative web and geospatial solutions.
+            {t('footer.tagline')}
           </p>
         </div>
         <ul
           ref={(el) => (contentRefs.current[1] = el)}
-          className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 opacity-0 animate-[fadeInUp_1s_ease-out]"
+          className={clsx(
+            'flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 opacity-0',
+            i18n.language === 'fa' ? 'space-x-reverse' : '',
+            'animate-[fadeInUp_1s_ease-out]'
+          )}
         >
           {socialLinks.map(({ label, url, icon }) => (
             <li key={label} className="group">
               <a
                 href={url}
                 className={clsx(
-                  'flex items-center space-x-2 text-gray-300 dark:text-gray-400 hover:text-blue-400 dark:hover:text-blue-300',
-                  'text-sm sm:text-base font-medium transition-all duration-300 animate-[pulse_2s_ease-in-out_infinite]'
+                  'flex items-center text-sm sm:text-base font-medium transition-all duration-300 animate-[pulse_2s_ease-in-out_infinite]',
+                  i18n.language === 'fa' ? 'space-x-reverse space-x-2 text-right' : 'space-x-2 text-left',
+                  'text-gray-300 dark:text-gray-400 hover:text-blue-400 dark:hover:text-blue-300'
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Visit Mahmoud Yousefi's ${label} profile`}
+                aria-label={t('footer.socialAria', { platform: label })}
               >
-                {icon}
-                <span>{label}</span>
+                {i18n.language === 'fa' ? (
+                  <>
+                    <span>{label}</span>
+                    {icon}
+                  </>
+                ) : (
+                  <>
+                    {icon}
+                    <span>{label}</span>
+                  </>
+                )}
               </a>
             </li>
           ))}
@@ -200,10 +223,11 @@ const Footer: React.FC = () => {
           ref={(el) => (contentRefs.current[2] = el)}
           className={clsx(
             'text-sm sm:text-base text-gray-400 dark:text-gray-500 opacity-0',
+            i18n.language === 'fa' ? 'text-right' : 'text-center',
             'animate-[fadeInUp_1.2s_ease-out]'
           )}
         >
-          © {new Date().getFullYear()} Mahmoud Yousefi. All rights reserved.
+          {t('footer.copyright', { year: new Date().getFullYear() })}
         </p>
       </div>
     </footer>

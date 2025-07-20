@@ -1,20 +1,63 @@
 import { useEffect, useRef } from 'react';
 import { FaUser, FaGraduationCap, FaTools, FaBriefcase, FaLanguage, FaDownload } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 import PDF from '../assets/Mahmoud-Yousefi.pdf';
 
 const Resume: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const skills = {
-    'Programming & Scripting': ['JavaScript', 'TypeScript', 'PHP', 'Python'],
-    'Frameworks & Libraries': ['ReactJS', 'Redux-Toolkit', 'Redux-Thunk', 'React Hooks', 'Ant Design', 'Material UI', 'Node.js (Nest.js)', 'Next.js', 'Express.js', 'FastApi', 'DRF', 'Django', 'Flask'],
-    'GIS Technologies': ['OpenLayers', 'Maplibre'],
-    'Tools & Technologies': ['Git', 'GitHub', 'GitLab', 'Docker', 'MySQL', 'PostgreSQL', 'MongoDB', 'Prisma', 'TypeORM', 'SQLAlchemy', 'Alembic'],
-    'Web Development': ['HTML & CSS', 'SASS', 'Less', 'TailwindCSS', 'Bootstrap', 'Flexbox', 'Grid', 'ESX (Ecmascript)'],
-    'Testing & Validation': ['MVC', 'D3Js', 'Cypress Test', 'Yup', 'Zod'],
-    'Other Skills': ['Solid Principles', 'REST API Development']
+    programmingScripting: [
+      'JavaScript',
+      'TypeScript',
+      'PHP',
+      'Python',
+    ],
+    frameworksLibraries: [
+      'ReactJS',
+      'Redux-Toolkit',
+      'Redux-Thunk',
+      'React Hooks',
+      'Ant Design',
+      'Material UI',
+      'Node.js (Nest.js)',
+      'Next.js',
+      'Express.js',
+      'FastApi',
+      'DRF',
+      'Django',
+      'Flask',
+    ],
+    gisTechnologies: ['OpenLayers', 'Maplibre'],
+    toolsTechnologies: [
+      'Git',
+      'GitHub',
+      'GitLab',
+      'Docker',
+      'MySQL',
+      'PostgreSQL',
+      'MongoDB',
+      'Prisma',
+      'TypeORM',
+      'SQLAlchemy',
+      'Alembic',
+    ],
+    webDevelopment: [
+      'HTML & CSS',
+      'SASS',
+      'Less',
+      'TailwindCSS',
+      'Bootstrap',
+      'Flexbox',
+      'Grid',
+      'ESX (Ecmascript)',
+    ],
+    testingValidation: ['MVC', 'D3Js', 'Cypress Test', 'Yup', 'Zod'],
+    otherSkills: ['Solid Principles', 'REST API Development'],
   };
 
   useEffect(() => {
@@ -79,7 +122,7 @@ const Resume: React.FC = () => {
             ctx.fill();
             ctx.stroke();
 
-            // Connect nearby particles
+            // Connect Colin: nearby particles
             particles.forEach((otherParticle) => {
               const dx = particle.x - otherParticle.x;
               const dy = particle.y - otherParticle.y;
@@ -112,7 +155,7 @@ const Resume: React.FC = () => {
       }
     }
 
-  return () => {
+    return () => {
       contentRefs.current.forEach((ref) => {
         if (ref) observer.unobserve(ref);
       });
@@ -122,11 +165,18 @@ const Resume: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen bg-gradient-to-b from-gray-100 to-blue-50 dark:from-gray-900 dark:to-blue-950 relative overflow-hidden font-inter py-12 sm:py-16 lg:py-20"
+      className={clsx(
+        'min-h-screen relative overflow-hidden py-12 sm:py-16 lg:py-20',
+        i18n.language === 'fa'
+          ? 'bg-gradient-to-l from-gray-100 to-blue-50 dark:from-gray-900 dark:to-blue-950 font-vazirmatn'
+          : 'bg-gradient-to-r from-gray-100 to-blue-50 dark:from-gray-900 dark:to-blue-950 font-inter'
+      )}
       style={{
-        backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.3) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 60%)',
+        backgroundImage:
+          'radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.3) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 60%)',
         animation: 'gradientShift 20s ease infinite',
       }}
+      aria-label={t('resume.title')}
     >
       <canvas
         ref={canvasRef}
@@ -155,26 +205,42 @@ const Resume: React.FC = () => {
           }
           @keyframes textGlow {
             0% { text-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
-            50% { text-shadow: 0 0 10px rgba(59 trudno, 246, 0.7); }
+            50% { text-shadow: 0 0 10px rgba(59, 130, 246, 0.7); }
             100% { text-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
           }
         `}
       </style>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl relative z-10">
         <h2
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8 sm:mb-12 lg:mb-16 animate-[textGlow_3s_ease-in-out_infinite]"
+          className={clsx(
+            'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-8 sm:mb-12 lg:mb-16 animate-[textGlow_3s_ease-in-out_infinite]',
+            'text-center'
+          )}
           style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)' }}
         >
-          Resume
+          {t('resume.title')}
         </h2>
-        <div className="text-center mb-8 sm:mb-12">
+        <div className={clsx('text-center mb-8 sm:mb-12')}>
           <a
             href={PDF}
             download="Mahmoud-Yousefi.pdf"
-            className="inline-flex items-center bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition-colors duration-300 animate-[subtlePulse_2s_ease-in-out_infinite]"
+            className={clsx(
+              'inline-flex items-center bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition-colors duration-300 animate-[subtlePulse_2s_ease-in-out_infinite]',
+              i18n.language === 'fa' ? 'space-x-reverse space-x-2' : 'space-x-2'
+            )}
+            aria-label={t('resume.downloadAria')}
           >
-            <FaDownload className="mr-2" />
-            Download Resume (PDF)
+            {i18n.language === 'fa' ? (
+              <>
+                <span>{t('resume.download')}</span>
+                <FaDownload />
+              </>
+            ) : (
+              <>
+                <FaDownload />
+                <span>{t('resume.download')}</span>
+              </>
+            )}
           </a>
         </div>
 
@@ -182,12 +248,26 @@ const Resume: React.FC = () => {
           ref={(el) => (contentRefs.current[0] = el)}
           className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 mb-8 opacity-0 transition-all duration-300 hover:shadow-2xl"
         >
-          <h3 className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-            <FaUser className="mr-3 text-blue-600" />
-            Professional Summary
+          <h3
+            className={clsx(
+              'text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center',
+              i18n.language === 'fa' ? 'space-x-reverse space-x-3 text-right' : 'space-x-3 text-left'
+            )}
+          >
+            {i18n.language === 'fa' ? (
+              <>
+                <span>{t('resume.professionalSummary.title')}</span>
+                <FaUser className="text-blue-600" />
+              </>
+            ) : (
+              <>
+                <FaUser className="text-blue-600" />
+                <span>{t('resume.professionalSummary.title')}</span>
+              </>
+            )}
           </h3>
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-            A passionate and skilled Full-Stack Developer with a strong background in Computer Science, currently pursuing a Master's degree in Algorithms and Theory of Computation. I have hands-on experience in building, optimizing, and maintaining complex web applications using modern technologies. I excel in developing user-friendly interfaces, implementing efficient solutions, and collaborating in team environments to drive project success.
+          <p className={clsx('text-gray-600 dark:text-gray-300 leading-relaxed', i18n.language === 'fa' ? 'text-right' : 'text-left')}>
+            {t('resume.professionalSummary.description')}
           </p>
         </div>
 
@@ -195,17 +275,31 @@ const Resume: React.FC = () => {
           ref={(el) => (contentRefs.current[1] = el)}
           className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 mb-8 opacity-0 transition-all duration-300 hover:shadow-2xl"
         >
-          <h3 className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-            <FaGraduationCap className="mr-3 text-blue-600" />
-            Education
+          <h3
+            className={clsx(
+              'text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center',
+              i18n.language === 'fa' ? 'space-x-reverse space-x-3 text-right' : 'space-x-3 text-left'
+            )}
+          >
+            {i18n.language === 'fa' ? (
+              <>
+                <span>{t('resume.education.title')}</span>
+                <FaGraduationCap className="text-blue-600" />
+              </>
+            ) : (
+              <>
+                <FaGraduationCap className="text-blue-600" />
+                <span>{t('resume.education.title')}</span>
+              </>
+            )}
           </h3>
-          <div className="mb-4">
-            <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Master's Degree in Algorithms and Theory of Computation</h4>
-            <p className="text-gray-600 dark:text-gray-300">Shahed University, Tehran, Iran | 2024 – Present</p>
+          <div className={clsx('mb-4', i18n.language === 'fa' ? 'text-right' : 'text-left')}>
+            <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-200">{t('resume.education.masters.title')}</h4>
+            <p className="text-gray-600 dark:text-gray-300">{t('resume.education.masters.details')}</p>
           </div>
-          <div>
-            <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Bachelor's Degree in Computer Science</h4>
-            <p className="text-gray-600 dark:text-gray-300">Shahed University, Tehran, Iran | Graduated 2024</p>
+          <div className={clsx(i18n.language === 'fa' ? 'text-right' : 'text-left')}>
+            <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-200">{t('resume.education.bachelors.title')}</h4>
+            <p className="text-gray-600 dark:text-gray-300">{t('resume.education.bachelors.details')}</p>
           </div>
         </div>
 
@@ -213,17 +307,41 @@ const Resume: React.FC = () => {
           ref={(el) => (contentRefs.current[2] = el)}
           className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 mb-8 opacity-0 transition-all duration-300 hover:shadow-2xl"
         >
-          <h3 className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-            <FaTools className="mr-3 text-blue-600" />
-            Skills
+          <h3
+            className={clsx(
+              'text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center',
+              i18n.language === 'fa' ? 'space-x-reverse space-x-3 text-right' : 'space-x-3 text-left'
+            )}
+          >
+            {i18n.language === 'fa' ? (
+              <>
+                <span>{t('resume.skills.title')}</span>
+                <FaTools className="text-blue-600" />
+              </>
+            ) : (
+              <>
+                <FaTools className="text-blue-600" />
+                <span>{t('resume.skills.title')}</span>
+              </>
+            )}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Object.entries(skills).map(([category, items]) => (
-              <div key={category} className="mb-4">
-                <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{category}</h4>
-                <ul className="list-disc list-inside text-gray-600 dark:text-gray-300">
+            {Object.entries(skills).map(([categoryKey, items]) => (
+              <div key={categoryKey} className="mb-4">
+                <h4 className={clsx('text-lg font-semibold text-gray-800 dark:text-gray-200', i18n.language === 'fa' ? 'text-right' : 'text-left')}>
+                  {t(`resume.skills.categories.${categoryKey}`)}
+                </h4>
+                <ul className={clsx('text-gray-600 dark:text-gray-300', i18n.language === 'fa' ? 'list-outside pr-4' : 'list-disc list-inside')}>
                   {items.map((skill) => (
-                    <li key={skill} className="transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">{skill}</li>
+                    <li
+                      key={skill}
+                      className={clsx(
+                        'transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400',
+                        i18n.language === 'fa' ? 'text-right' : 'text-left'
+                      )}
+                    >
+                      {t(`resume.skills.items.${skill.replace(/\s|&|\(|\)/g, '')}`)}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -235,18 +353,36 @@ const Resume: React.FC = () => {
           ref={(el) => (contentRefs.current[3] = el)}
           className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 mb-8 opacity-0 transition-all duration-300 hover:shadow-2xl"
         >
-          <h3 className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-            <FaBriefcase className="mr-3 text-blue-600" />
-            Professional Experience
+          <h3
+            className={clsx(
+              'text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center',
+              i18n.language === 'fa' ? 'space-x-reverse space-x-3 text-right' : 'space-x-3 text-left'
+            )}
+          >
+            {i18n.language === 'fa' ? (
+              <>
+                <span>{t('resume.professionalExperience.title')}</span>
+                <FaBriefcase className="text-blue-600" />
+              </>
+            ) : (
+              <>
+                <FaBriefcase className="text-blue-600" />
+                <span>{t('resume.professionalExperience.title')}</span>
+              </>
+            )}
           </h3>
-          <div>
-            <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Front-End Developer</h4>
-            <p className="text-gray-600 dark:text-gray-300">Hoshan Kavosh Borna, Tehran, Iran | March 2024 – Present</p>
-            <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mt-2">
-              <li className="transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Designed and implemented a modern UI for Bizagi workflow engine, enabling intuitive user interaction for internal business processes.</li>
-              <li className="transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Customized complex UI components to interact with organizational workflows and forms, improving user experience and operational efficiency.</li>
-              <li className="transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Developed and customized MapStore2, an open-source project, to meet internal project requirements, enhancing mapping functionalities.</li>
-              <li className="transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Created a template integrated with Apache NIFI to display and manage process groups in a table format.</li>
+          <div className={clsx(i18n.language === 'fa' ? 'text-right' : 'text-left')}>
+            <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-200">{t('resume.professionalExperience.frontendDeveloper.title')}</h4>
+            <p className="text-gray-600 dark:text-gray-300">{t('resume.professionalExperience.frontendDeveloper.details')}</p>
+            <ul className={clsx('text-gray-600 dark:text-gray-300 mt-2', i18n.language === 'fa' ? 'list-outside pr-4' : 'list-disc list-inside')}>
+              {['task1', 'task2', 'task3', 'task4'].map((task) => (
+                <li
+                  key={task}
+                  className="transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  {t(`resume.professionalExperience.frontendDeveloper.tasks.${task}`)}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -255,13 +391,31 @@ const Resume: React.FC = () => {
           ref={(el) => (contentRefs.current[4] = el)}
           className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 opacity-0 transition-all duration-300 hover:shadow-2xl"
         >
-          <h3 className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-            <FaLanguage className="mr-3 text-blue-600" />
-            Languages
+          <h3
+            className={clsx(
+              'text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center',
+              i18n.language === 'fa' ? 'space-x-reverse space-x-3 text-right' : 'space-x-3 text-left'
+            )}
+          >
+            {i18n.language === 'fa' ? (
+              <>
+                <span>{t('resume.languages.title')}</span>
+                <FaLanguage className="text-blue-600" />
+              </>
+            ) : (
+              <>
+                <FaLanguage className="text-blue-600" />
+                <span>{t('resume.languages.title')}</span>
+              </>
+            )}
           </h3>
-          <ul className="list-disc list-inside text-gray-600 dark:text-gray-300">
-            <li className="transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">English: Upper-intermediate</li>
-            <li className="transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400">Persian: Native</li>
+          <ul className={clsx('text-gray-600 dark:text-gray-300', i18n.language === 'fa' ? 'list-outside pr-4' : 'list-disc list-inside')}>
+            <li className={clsx('transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400', i18n.language === 'fa' ? 'text-right' : 'text-left')}>
+              {t('resume.languages.english')}
+            </li>
+            <li className={clsx('transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400', i18n.language === 'fa' ? 'text-right' : 'text-left')}>
+              {t('resume.languages.persian')}
+            </li>
           </ul>
         </div>
       </div>

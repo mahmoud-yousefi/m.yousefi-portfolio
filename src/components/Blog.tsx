@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { FaCode, FaMap, FaServer, FaVial, FaRocket, FaPaintBrush, FaDatabase } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
 const Blog: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -10,59 +12,45 @@ const Blog: React.FC = () => {
   const blogPosts = [
     {
       id: 1,
-      title: 'Building a Custom UI for Bizagi Workflow with React and Redux',
-      excerpt: 'Discover how I crafted an intuitive UI for Bizagi using React, Redux-Toolkit, and Material UI to streamline enterprise workflows.',
+      key: 'post1',
       url: 'https://reactjs.org/docs/getting-started.html',
       icon: <FaCode className="w-16 h-16 text-blue-600" />,
-      badges: ['React', 'Redux-Toolkit', 'Material UI'],
     },
     {
       id: 2,
-      title: 'Integrating OpenLayers with React for Interactive Maps',
-      excerpt: 'A guide to building dynamic GIS applications by integrating OpenLayers and Maplibre with React for enterprise mapping solutions.',
+      key: 'post2',
       url: 'https://openlayers.org/',
       icon: <FaMap className="w-16 h-16 text-blue-600" />,
-      badges: ['OpenLayers', 'Maplibre', 'React'],
     },
     {
       id: 3,
-      title: 'Best Practices for REST API Development with Nest.js',
-      excerpt: 'Learn how I build scalable REST APIs using Nest.js, TypeScript, and SOLID principles for robust backend systems.',
+      key: 'post3',
       url: 'https://docs.nestjs.com/techniques/performance',
       icon: <FaServer className="w-16 h-16 text-blue-600" />,
-      badges: ['Nest.js', 'TypeScript', 'REST API'],
     },
     {
       id: 4,
-      title: 'End-to-End Testing in React Apps with Cypress',
-      excerpt: 'Explore my approach to robust E2E testing for React apps using Cypress to ensure reliable enterprise applications.',
+      key: 'post4',
       url: 'https://docs.cypress.io/guides/getting-started/testing-your-app#React',
       icon: <FaVial className="w-16 h-16 text-blue-600" />,
-      badges: ['Cypress', 'React', 'Testing'],
     },
     {
       id: 5,
-      title: 'Optimizing Web Performance with Next.js and TailwindCSS',
-      excerpt: 'How I leverage Next.js and TailwindCSS to create fast, responsive, and visually appealing web applications.',
+      key: 'post5',
       url: 'https://nextui.org/docs/',
       icon: <FaRocket className="w-16 h-16 text-blue-600" />,
-      badges: ['Next.js', 'TailwindCSS', 'Performance'],
     },
     {
       id: 6,
-      title: 'Building Scalable Backends with Django and PostgreSQL',
-      excerpt: 'A dive into creating efficient, scalable backends using Django, PostgreSQL, and Django REST Framework for enterprise needs.',
+      key: 'post6',
       url: 'https://www.djangoproject.com/start/',
       icon: <FaDatabase className="w-16 h-16 text-blue-600" />,
-      badges: ['Django', 'PostgreSQL', 'DRF'],
     },
     {
       id: 7,
-      title: 'Crafting Responsive UIs with Ant Design and React Hooks',
-      excerpt: 'My experience using Ant Design and React Hooks to build modern, user-friendly interfaces for complex applications.',
+      key: 'post7',
       url: 'https://ant.design/docs/react/introduce',
       icon: <FaPaintBrush className="w-16 h-16 text-blue-600" />,
-      badges: ['Ant Design', 'React Hooks', 'UI/UX'],
     },
   ];
 
@@ -172,12 +160,17 @@ const Blog: React.FC = () => {
     <section
       ref={sectionRef}
       className={clsx(
-        'min-h-screen bg-gradient-to-b from-gray-100 to-blue-50 dark:from-gray-900 dark:to-blue-950 relative overflow-hidden font-inter py-12 sm:py-16 lg:py-20'
+        'min-h-screen relative overflow-hidden py-12 sm:py-16 lg:py-20',
+        i18n.language === 'fa'
+          ? 'bg-gradient-to-l from-gray-100 to-blue-50 dark:from-gray-900 dark:to-blue-950 font-vazirmatn'
+          : 'bg-gradient-to-r from-gray-100 to-blue-50 dark:from-gray-900 dark:to-blue-950 font-inter'
       )}
       style={{
-        backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.3) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 60%)',
+        backgroundImage:
+          'radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.3) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 60%)',
         animation: 'gradientShift 20s ease infinite',
       }}
+      aria-label={t('blog.title')}
     >
       <canvas
         ref={canvasRef}
@@ -212,10 +205,13 @@ const Blog: React.FC = () => {
       </style>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
         <h2
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8 sm:mb-12 lg:mb-16 animate-[textGlow_3s_ease-in-out_infinite]"
+          className={clsx(
+            'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-8 sm:mb-12 lg:mb-16 animate-[textGlow_3s_ease-in-out_infinite]',
+            'text-center'
+          )}
           style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)' }}
         >
-          Blog
+          {t('blog.title')}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {blogPosts.map((post, index) => (
@@ -227,16 +223,49 @@ const Blog: React.FC = () => {
                 'opacity-0 transition-all duration-300 hover:shadow-2xl hover:bg-blue-50 dark:hover:bg-blue-900/50'
               )}
             >
-              <div className="flex items-center mb-4">
-                {post.icon}
-                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100 ml-3">{post.title}</h3>
+              <div
+                className={clsx(
+                  'flex items-center mb-4',
+                  i18n.language === 'fa' ? 'space-x-reverse space-x-3' : 'space-x-3'
+                )}
+              >
+                {i18n.language === 'fa' ? (
+                  <>
+                    <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                      {t(`blog.posts.${post.key}.title`)}
+                    </h3>
+                    {post.icon}
+                  </>
+                ) : (
+                  <>
+                    {post.icon}
+                    <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                      {t(`blog.posts.${post.key}.title`)}
+                    </h3>
+                  </>
+                )}
               </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base leading-relaxed">{post.excerpt}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {post.badges.map((badge) => (
+              <p
+                className={clsx(
+                  'text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base leading-relaxed',
+                  i18n.language === 'fa' ? 'text-right' : 'text-left'
+                )}
+              >
+                {t(`blog.posts.${post.key}.excerpt`)}
+              </p>
+              <div
+                className={clsx(
+                  'flex flex-wrap gap-2 mb-4',
+                  i18n.language === 'fa' ? 'justify-start space-x-reverse space-x-2' : 'justify-start space-x-2'
+                )}
+              >
+                {(t(`blog.posts.${post.key}.badges`, { returnObjects: true }) as string[]).map((badge) => (
                   <span
                     key={badge}
-                    className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-xs sm:text-sm px-2 py-1 rounded-full font-medium"
+                    className={clsx(
+                      'inline-block bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-xs sm:text-sm px-2 py-1 rounded-full font-medium',
+                      i18n.language === 'fa' ? 'text-right' : 'text-left'
+                    )}
                   >
                     {badge}
                   </span>
@@ -248,20 +277,40 @@ const Blog: React.FC = () => {
                 rel="noopener noreferrer"
                 className={clsx(
                   'inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300',
-                  'font-semibold text-sm sm:text-base transition-colors duration-300 animate-[pulse_2s_ease-in-out_infinite]'
+                  'font-semibold text-sm sm:text-base transition-colors duration-300 animate-[pulse_2s_ease-in-out_infinite]',
+                  i18n.language === 'fa' ? 'space-x-reverse space-x-2' : 'space-x-2'
                 )}
-                aria-label={`Read more about ${post.title}`}
+                aria-label={t('blog.readMoreAria', { title: t(`blog.posts.${post.key}.title`) })}
               >
-                Read More
-                <svg
-                  className="w-5 h-5 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                {i18n.language === 'fa' ? (
+                  <>
+                    <span>{t('blog.readMore')}</span>
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </>
+                ) : (
+                  <>
+                    <span>{t('blog.readMore')}</span>
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </>
+                )}
               </a>
             </div>
           ))}
