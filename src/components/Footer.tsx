@@ -25,6 +25,7 @@ const Footer: React.FC = () => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-[fadeInUp_0.8s_ease-out_forwards]');
             entry.target.classList.remove('animate-[fadeOutDown_0.8s_ease-out_forwards]');
+            (entry.target as HTMLElement).style.opacity = '1';
           } else if (entry.boundingClientRect.top > 0) {
             entry.target.classList.add('animate-[fadeOutDown_0.8s_ease-out_forwards]');
             entry.target.classList.remove('animate-[fadeInUp_0.8s_ease-out_forwards]');
@@ -186,7 +187,7 @@ const Footer: React.FC = () => {
         <ul
           ref={(el) => (contentRefs.current[1] = el)}
           className={clsx(
-            'flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 opacity-0',
+            'flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12',
             i18n.language === 'fa' ? 'space-x-reverse' : '',
             'animate-[fadeInUp_1s_ease-out]'
           )}
@@ -219,16 +220,6 @@ const Footer: React.FC = () => {
             </li>
           ))}
         </ul>
-        <p
-          ref={(el) => (contentRefs.current[2] = el)}
-          className={clsx(
-            'text-sm sm:text-base text-gray-400 dark:text-gray-500 opacity-0',
-            i18n.language === 'fa' ? 'text-right' : 'text-center',
-            'animate-[fadeInUp_1.2s_ease-out]'
-          )}
-        >
-          {t('footer.copyright', { year: new Date().getFullYear() })}
-        </p>
       </div>
     </footer>
   );
