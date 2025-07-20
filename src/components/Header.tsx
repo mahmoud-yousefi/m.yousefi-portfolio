@@ -314,18 +314,25 @@ const Header: React.FC = () => {
             </li>
           ))}
           <li>
-            <button
-              onClick={toggleLanguage}
-              className={clsx(
-                'flex items-center space-x-2 text-sm sm:text-base md:text-lg font-semibold tracking-wide',
-                i18n.language === 'fa' ? 'text-right' : 'text-left',
-                'text-gray-100 dark:text-gray-200 hover:text-blue-300 dark:hover:text-blue-200',
-                'transition-all duration-300 px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700'
-              )}
-              aria-label={i18n.language === 'en' ? 'Switch to Persian' : 'Switch to English'}
-            >
-              {i18n.language === 'en' ? 'FA' : 'EN'}
-            </button>
+          <button
+                onClick={toggleLanguage}
+                className={clsx(
+                  'flex items-center gap-2 text-xs sm:text-sm xl:text-base font-semibold tracking-wide',
+                  'text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-300',
+                  'transition-all duration-300 px-4 py-2 rounded-full bg-white dark:bg-gray-800 shadow-md'
+                )}
+                aria-label={i18n.language === 'en' ? 'Switch to Persian' : 'Switch to English'}
+              >
+                {i18n.language === 'en' ? (
+                  <>
+                    🇮🇷 <span>FA</span>
+                  </>
+                ) : (
+                  <>
+                    🇬🇧 <span>EN</span>
+                  </>
+                )}
+              </button>
           </li>
         </ul>
       </nav>

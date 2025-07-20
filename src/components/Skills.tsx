@@ -101,7 +101,7 @@ const SkillCard = forwardRef(({ skill, index }, ref) => {
       ref={ref}
       className={clsx(
         'group flex items-center bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 animate-[fadeInUp_0.8s_ease-out_forwards]',
-        i18n.language === 'fa' ? 'space-x-reverse space-x-3 sm:space-x-4' : 'space-x-3 sm:space-x-4'
+        i18n.language === 'fa' ? 'space-x-reverse justify-center space-x-3 sm:space-x-4' : 'space-x-3 sm:space-x-4'
       )}
       style={{ animationDelay: `${index * 0.1}s`, direction: /* i18n.language === 'fa' ? 'rtl' : */ 'ltr' }}
     >
@@ -110,7 +110,7 @@ const SkillCard = forwardRef(({ skill, index }, ref) => {
           <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">{skill.name}</span>
           <Icon
             className={clsx(
-              'text-2xl sm:text-3xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12 animate-[rotateIn_1.2s_ease-in-out_forwards]',
+              'text-2xl sm:text-3xl transition-transform duration-300 !mx-3 group-hover:scale-110 group-hover:rotate-12 animate-[rotateIn_1.2s_ease-in-out_forwards]',
               `dark:[color:${skill.darkColor}]`
             )}
             style={{ color: skill.color, animationDelay: `${index * 0.1}s` }}
