@@ -1,5 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -13,74 +14,88 @@ import Blog from './components/Blog';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const { i18n, t } = useTranslation();
+  const location = useLocation();
 
   useEffect(() => {
-    // Load theme from localStorage or default to light
+    // Load theme from localStorage or system preference
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
     if (savedTheme) {
       setTheme(savedTheme);
-      if (savedTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setTheme('dark');
       document.documentElement.classList.add('dark');
     }
   }, []);
 
+  useEffect(() => {
+    // Scroll to top with smooth behavior on route change
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
+
+  useEffect(() => {
+    // Set document direction based on language
+    document.documentElement.dir = i18n.language === 'fa' ? 'rtl' : 'ltr';
+  }, [i18n.language]);
+
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'fa' : 'en';
+    i18n.changeLanguage(newLang);
+    localStorage.setItem('i18nextLng', newLang);
   };
 
   return (
-    <Router basename='/m.yousefi-portfolio/'>
-      <div className={clsx('flex flex-col min-h-screen', 'bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100')}>
-        <Header />
-        <main className="flex-grow pt-16">
-          <Routes>
-            <Route path="/" element={<Hero />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/skills" element={<Skills />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/resume" element={<Resume />} />
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </main>
-        {/* <div className="fixed left-3 bottom-3">
-          <button
-            onClick={toggleTheme}
-            className={clsx(
-              'p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
-              'hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200',
-              'focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-900'
-            )}
-            aria-label={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
-          >
-            {theme === 'light' ? (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-            ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-            )}
-          </button>
-        </div> */}
-        <Footer />
-      </div>
-    </Router>
+    <div
+      className={clsx(
+        'flex flex-col min-h-screen',
+        'bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100',
+        i18n.language === 'fa' ? 'font-vazirmatn' : 'font-inter'
+      )}
+    >
+      <Header toggleTheme={toggleTheme} toggleLanguage={toggleLanguage} currentTheme={theme} currentLanguage={i18n.language} />
+      <main
+        key={location.pathname}
+        className={clsx(
+          'flex-grow pt-16 transition-opacity duration-500 ease-in-out',
+          'animate-[fadeIn_0.5s_ease-out]'
+        )}
+      >
+        <style>
+          {`
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(20px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+          `}
+        </style>
+        <Routes>
+          <Route path="/" element={<Hero />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/resume" element={<Resume />} />
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
   );
 };
 
-export default App;
+// Wrap App with Router to provide routing context
+const AppWithRouter: React.FC = () => (
+  <Router basename="/m.yousefi-portfolio/">
+    <App />
+  </Router>
+);
+
+export default AppWithRouter;
