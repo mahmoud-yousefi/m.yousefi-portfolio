@@ -1,101 +1,71 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import clsx from 'clsx';
+import Background from './components/Background';
 import Header from './components/Header';
-import Footer from './components/Footer';
 import Hero from './components/Hero';
+import Marquee from './components/Marquee';
 import About from './components/About';
+import Journey from './components/Journey';
 import Skills from './components/Skills';
-import Contact from './components/Contact';
+import Academy from './components/Academy';
 import Projects from './components/Projects';
-import Resume from './components/Resume';
+import Process from './components/Process';
 import Blog from './components/Blog';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
 
-const App: React.FC = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const { i18n, t } = useTranslation();
-  const location = useLocation();
+type Theme = 'light' | 'dark';
+
+export default function App() {
+  const { i18n } = useTranslation();
+  const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
-    // Load theme from localStorage or system preference
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
-      document.documentElement.classList.add('dark');
-    }
+    const saved = localStorage.getItem('theme') as Theme | null;
+    const initial: Theme = saved ?? 'dark';
+    setTheme(initial);
+    document.documentElement.classList.toggle('dark', initial === 'dark');
   }, []);
 
   useEffect(() => {
-    // Scroll to top with smooth behavior on route change
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [location.pathname]);
-
-  useEffect(() => {
-    // Set document direction based on language
-    document.documentElement.dir = i18n.language === 'fa' ? 'rtl' : 'ltr';
+    const lang = i18n.language === 'en' ? 'en' : 'fa';
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
   }, [i18n.language]);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-  };
-
-  const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'fa' : 'en';
-    i18n.changeLanguage(newLang);
-    localStorage.setItem('i18nextLng', newLang);
+    const next: Theme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('theme', next);
+    document.documentElement.classList.toggle('dark', next === 'dark');
   };
 
   return (
-    <div
-      className={clsx(
-        'flex flex-col min-h-screen',
-        'bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100',
-        i18n.language === 'fa' ? 'font-vazirmatn' : 'font-inter'
-      )}
-    >
-      <Header toggleTheme={toggleTheme} toggleLanguage={toggleLanguage} currentTheme={theme} currentLanguage={i18n.language} />
-      <main
-        key={location.pathname}
-        className={clsx(
-          'flex-grow pt-16 transition-opacity duration-500 ease-in-out',
-          'animate-[fadeIn_0.5s_ease-out]'
-        )}
+    <div className={`min-h-screen ${i18n.language === 'en' ? 'font-sans' : 'font-fa'}`}>
+      <a
+        href="#content"
+        className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
       >
-        <style>
-          {`
-            @keyframes fadeIn {
-              from { opacity: 0; transform: translateY(20px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-          `}
-        </style>
-        <Routes>
-          <Route path="/" element={<Hero />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/skills" element={<Skills />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/resume" element={<Resume />} />
-          <Route path="/blog" element={<Blog />} />
-        </Routes>
+        {i18n.t('ui.skipToContent')}
+      </a>
+
+      <Background />
+      <Header theme={theme} onToggleTheme={toggleTheme} />
+
+      <main id="content">
+        <Hero />
+        <Marquee />
+        <About />
+        <Journey />
+        <Skills />
+        <Academy />
+        <Projects />
+        <Process />
+        <Blog />
+        <Contact />
       </main>
+
       <Footer />
     </div>
   );
-};
-
-// Wrap App with Router to provide routing context
-const AppWithRouter: React.FC = () => (
-  <Router basename="/m.yousefi-portfolio/">
-    <App />
-  </Router>
-);
-
-export default AppWithRouter;
+}

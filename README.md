@@ -1,69 +1,51 @@
-# React + TypeScript + Vite
+# محمود یوسفی — پرتفولیو
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+پرتفولیوی شخصی، دوزبانه (فارسی پیش‌فرض، انگلیسی) با پشتیبانی کامل RTL، طراحی مبتنی بر توکن و
+انیمیشن‌های ظاهر شدن هنگام اسکرول.
 
-Currently, two official plugins are available:
+## فناوری‌ها
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19 + TypeScript (strict)
+- Vite 7
+- TailwindCSS 3 با توکن‌های رنگ/فونت در `tailwind.config.js` و `src/index.css`
+- i18next برای دوزبانگی و تغییر جهت سند
 
-## Expanding the ESLint configuration
+## اجرا
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev      # http://localhost:5173/m.yousefi-portfolio/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+> این پروژه به Node نسخهٔ ۲۰.۱۹ یا بالاتر نیاز دارد (Vite 7 از `crypto.hash` استفاده می‌کند).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## اسکریپت‌ها
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| دستور | کار |
+| --- | --- |
+| `npm run dev` | سرور توسعه |
+| `npm run build` | بررسی تایپ + ساخت خروجی در `dist` |
+| `npm run preview` | پیش‌نمایش خروجی ساخته‌شده |
+| `npm run lint` | اجرای ESLint |
+| `npm run deploy` | انتشار روی GitHub Pages (شاخهٔ `gh-pages`) |
+
+## ساختار
+
 ```
+src/
+├─ components/      بخش‌های صفحه (Hero، About، Journey، Skills، Academy، Projects، …)
+├─ content/         محتوا و داده‌های دوزبانه (مهارت‌ها، پروژه‌ها، آکادمی، مسیر، یادداشت‌ها)
+├─ i18n/            رشته‌های رابط کاربری (fa پیش‌فرض، en)
+├─ lib/             هوک‌های اسکرول/ظاهر شدن و کمک‌تابع‌های زبان
+└─ assets/          تصویر پروفایل و فایل رزومه
+```
+
+محتوا از رابط کاربری جدا شده است: برای افزودن پروژه یا مقالهٔ تازه فقط فایل‌های `src/content`
+را تغییر دهید. متن‌های دوزبانه با `{ fa, en }` نگه‌داری می‌شوند و با `tr()` / `trList()` خوانده
+می‌شوند.
+
+## انیمیشن
+
+همهٔ انیمیشن‌ها با CSS و یک `IntersectionObserver` مشترک (`src/lib/hooks.ts`) انجام می‌شوند؛ بدون
+کتابخانهٔ اضافه. برای کاربرانی که `prefers-reduced-motion` را فعال کرده‌اند، حرکت‌ها غیرفعال
+می‌شوند.

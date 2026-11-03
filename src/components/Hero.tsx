@@ -1,169 +1,165 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import clsx from 'clsx';
-import myAvatar from '../assets/IMG_20250327_031322_411.webp';
+import { FaArrowRight, FaDownload, FaLocationDot, FaReact, FaMap, FaBolt } from 'react-icons/fa6';
+import Reveal from './Reveal';
+import { profile, headlineStats } from '../content/profile';
+import { num, tr } from '../lib/lang';
+import portrait from '../assets/IMG_20250327_031322_411.webp';
+import resumePdf from '../assets/CV-Mahmoud-Yousefi-EN.pdf';
 
-const Hero: React.FC = () => {
+export default function Hero() {
   const { t, i18n } = useTranslation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const lang = i18n.language;
+  const isFa = lang !== 'en';
+  const rotating = t('hero.rotating', { returnObjects: true }) as string[];
+  const [index, setIndex] = useState(0);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setIndex((value) => (value + 1) % rotating.length);
+    }, 2600);
+    return () => window.clearInterval(timer);
+  }, [rotating.length]);
 
   return (
-    <>
-      <section
-        className={clsx(
-          'min-h-screen flex items-center justify-center relative overflow-hidden py-10 sm:py-12 lg:py-16',
-          i18n.language === 'fa'
-            ? 'bg-gradient-to-bl from-blue-700 via-gray-800 to-blue-600 dark:from-blue-900 dark:via-gray-900 dark:to-blue-800 font-vazirmatn'
-            : 'bg-gradient-to-br from-blue-700 via-gray-800 to-blue-600 dark:from-blue-900 dark:via-gray-900 dark:to-blue-800 font-inter'
-        )}
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.4) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.4) 0%, transparent 50%)',
-          animation: 'gradientShift 25s ease infinite',
-        }}
-        aria-label={t('hero.title')}
-      >
-        <style>
-          {`
-            @keyframes gradientShift {
-              0% { background-position: 0% 50%; }
-              50% { background-position: 100% 50%; }
-              100% { background-position: 0% 50%; }
-            }
-            @keyframes fadeInUp {
-              from { opacity: 0; transform: translateY(30px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-            @keyframes pulse {
-              0%, 100% { transform: scale(1); }
-              50% { transform: scale(1.03); }
-            }
-            @keyframes bounceSoft {
-              0%, 100% { transform: translateY(0); }
-              50% { transform: translateY(-6px); }
-            }
-            @keyframes modalFadeIn {
-              from { opacity: 0; transform: scale(0.9); }
-              to { opacity: 1; transform: scale(1); }
-            }
-          `}
-        </style>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl text-center relative z-10">
-          <button
-            onClick={openModal}
-            className="mx-auto mb-6 sm:mb-8 focus:outline-none"
-            aria-label={t('hero.avatarAria')}
-          >
-            <img
-              src={myAvatar}
-              alt={t('hero.avatarAlt')}
-              className={clsx(
-                'w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 mx-auto rounded-full border-4',
-                'border-blue-300 dark:border-blue-400 object-cover shadow-xl',
-                'hover:scale-105 hover:shadow-blue-400/50 dark:hover:shadow-blue-500/50 transition-all duration-500 ease-out'
-              )}
-              onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/80?text=MY')}
-            />
-          </button>
-          <h1
-            className={clsx(
-              'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-blue-950 dark:text-white mb-4 sm:mb-6',
-              'animate-[fadeInUp_0.8s_ease-out]',
-              'text-center'
-            )}
-            style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.4)' }}
-          >
-            {t('hero.title')}
-          </h1>
-          <p
-            className={clsx(
-              'text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-8 sm:mb-10 lg:mb-12',
-              'animate-[fadeInUp_1s_ease-out]',
-              i18n.language === 'fa' ? 'text-right' : 'text-center'
-            )}
-          >
-            {t('hero.description')}
-          </p>
-          <div
-            className={clsx(
-              'flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0',
-              i18n.language === 'fa' ? 'sm:flex-row-reverse sm:space-x-reverse sm:space-x-4 lg:space-x-6' : 'sm:space-x-4 lg:space-x-6'
-            )}
-          >
-            <Link
-              to="/contact"
-              className={clsx(
-                'bg-blue-500 dark:bg-blue-600 text-white py-2.5 px-6 sm:py-3 sm:px-8 rounded-full text-base sm:text-lg font-semibold',
-                'shadow-lg hover:bg-blue-600 dark:hover:bg-blue-700 hover:scale-105',
-                'transition-all duration-300 animate-[pulse_2.5s_ease-in-out_infinite]',
-                'focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-offset-gray-900'
-              )}
-              aria-label={t('hero.contactAria')}
-            >
-              {t('hero.contactButton')}
-            </Link>
-            <Link
-              to="/projects"
-              className={clsx(
-                'bg-transparent border-2 border-blue-300 dark:border-blue-400 text-blue-300 dark:text-blue-400',
-                'py-2.5 px-6 sm:py-3 sm:px-8 rounded-full text-base sm:text-lg font-semibold',
-                'hover:bg-blue-300 dark:hover:bg-blue-400 hover:text-gray-900 dark:hover:text-gray-900 hover:scale-105',
-                'transition-all duration-300 animate-[pulse_2.5s_ease-in-out_infinite]',
-                'focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-offset-gray-900',
-                i18n.language === 'fa' ? '!mr-4' : '!mx-4'
-              )}
-              aria-label={t('hero.projectsAria')}
-            >
-              {t('hero.projectsButton')}
-            </Link>
-          </div>
-        </div>
-      </section>
+    <section id="home" className="relative overflow-hidden pb-16 pt-28 sm:pt-32 lg:pb-24 lg:pt-40">
+      <div className="container-x">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
+          {/* Copy */}
+          <div>
+            <Reveal>
+              <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 px-3.5 py-1.5 text-xs font-medium text-muted backdrop-blur">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-lime opacity-70" style={{ animation: 'pulse-ring 2.2s ease-out infinite' }} />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-lime" />
+                </span>
+                {t('hero.badge')}
+              </span>
+            </Reveal>
 
-      {/* Modal for enlarged avatar */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 bg-black/60 dark:bg-black/70 flex items-center justify-center z-50"
-          onClick={closeModal}
-          role="dialog"
-          aria-modal="true"
-          aria-label={t('hero.modalAria')}
-        >
-          <div
-            className="relative animate-[modalFadeIn_0.4s_ease-out]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={myAvatar}
-              alt={t('hero.modalAlt')}
-              className={clsx(
-                'w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[28rem] lg:h-[28rem] rounded-full object-cover border-4',
-                'border-blue-300 dark:border-blue-400 shadow-2xl'
-              )}
-              onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/200?text=MY')}
-            />
-            <button
-              onClick={closeModal}
-              className={clsx(
-                'absolute top-4 p-2 bg-gray-800/90 dark:bg-gray-700/90 text-white rounded-full',
-                'hover:bg-gray-700 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-black',
-                i18n.language === 'fa' ? 'left-4' : 'right-4'
-              )}
-              aria-label={t('hero.closeModalAria')}
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            <Reveal delay={90}>
+              <h1 className="mt-6 text-[2.5rem] font-extrabold leading-[1.1] tracking-tight sm:text-6xl lg:text-[4.2rem]">
+                <span className="block text-sm font-medium text-muted sm:text-base">{t('hero.greeting')}</span>
+                <span className="gradient-text mt-2 block">{tr(profile.name, lang)}</span>
+              </h1>
+            </Reveal>
+
+            <Reveal delay={150}>
+              <p className="mt-5 flex flex-wrap items-baseline gap-x-2 text-lg font-semibold text-ink/90 sm:text-2xl">
+                <span className="text-muted">{t('hero.rolePrefix')}</span>
+                <span className="relative inline-flex h-8 items-center overflow-hidden sm:h-9">
+                  <span key={index} className="animate-word bg-gradient-to-r from-accent-soft to-aqua bg-clip-text text-transparent">
+                    {rotating[index]}
+                  </span>
+                </span>
+              </p>
+            </Reveal>
+
+            <Reveal delay={210}>
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">{t('hero.description')}</p>
+            </Reveal>
+
+            <Reveal delay={270}>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <a href="#projects" className="btn-primary group">
+                  {t('hero.ctaProjects')}
+                  <FaArrowRight
+                    className={`h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1 ${isFa ? 'rotate-180' : ''}`}
+                  />
+                </a>
+                <a href={resumePdf} download="Mahmoud-Yousefi-CV.pdf" className="btn-ghost group">
+                  <FaDownload className="h-3.5 w-3.5 text-accent-soft transition-transform duration-300 group-hover:translate-y-0.5" />
+                  {t('hero.ctaResume')}
+                </a>
+              </div>
+            </Reveal>
+
+            <Reveal delay={330}>
+              <p className="mt-5 flex items-center gap-2 text-xs text-muted">
+                <FaLocationDot className="h-3.5 w-3.5 text-accent-soft" />
+                {tr(profile.location, lang)}
+                <span className="text-line">|</span>
+                {t('hero.availability')}
+              </p>
+            </Reveal>
+
+            <Reveal delay={390}>
+              <dl className="mt-10 grid max-w-lg grid-cols-2 gap-x-6 gap-y-5 border-t border-line pt-6 sm:grid-cols-4">
+                {headlineStats.map((stat) => (
+                  <div key={stat.key}>
+                    <dt className="order-2 mt-1 text-[11px] leading-tight text-muted">{t(`hero.stats.${stat.key}`)}</dt>
+                    <dd className="font-mono text-2xl font-bold text-ink">
+                      {num(stat.value, lang)}
+                      <span className="text-accent-soft">{stat.suffix}</span>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </Reveal>
           </div>
+
+          {/* Portrait */}
+          <Reveal delay={200} className="relative mx-auto w-full max-w-sm lg:max-w-md">
+            <div className="relative aspect-square">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-accent/25 via-transparent to-aqua/25 blur-2xl" />
+              <div className="absolute inset-2 animate-spin-slow rounded-full border border-dashed border-line/80" />
+              <div
+                className="absolute inset-8 rounded-full border border-accent/20"
+                style={{ animation: 'spin-slow 40s linear infinite reverse' }}
+              >
+                <span className="absolute -top-1 start-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-aqua shadow-[0_0_16px_4px_rgba(34,211,238,0.6)]" />
+              </div>
+
+              <div className="absolute inset-[16%] overflow-hidden rounded-full border border-line shadow-2xl">
+                <img
+                  src={portrait}
+                  alt={tr(profile.name, lang)}
+                  className="h-full w-full object-cover"
+                  width={420}
+                  height={420}
+                  loading="eager"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+              </div>
+
+              <div className="absolute -bottom-2 start-0 animate-float rounded-2xl border border-line bg-surface/90 px-3 py-2 shadow-card backdrop-blur">
+                <div className="flex items-center gap-2 text-xs font-semibold">
+                  <FaReact className="h-4 w-4 text-[#61DAFB]" />
+                  React · TS
+                </div>
+              </div>
+              <div
+                className="absolute -top-1 end-0 animate-float rounded-2xl border border-line bg-surface/90 px-3 py-2 shadow-card backdrop-blur"
+                style={{ animationDelay: '-2.5s' }}
+              >
+                <div className="flex items-center gap-2 text-xs font-semibold">
+                  <FaMap className="h-4 w-4 text-aqua" />
+                  GIS · OpenLayers
+                </div>
+              </div>
+              <div
+                className="absolute bottom-8 end-[-6%] animate-float rounded-2xl border border-line bg-surface/90 px-3 py-2 shadow-card backdrop-blur"
+                style={{ animationDelay: '-4.5s' }}
+              >
+                <div className="flex items-center gap-2 text-xs font-semibold">
+                  <FaBolt className="h-4 w-4 text-[#F59E0B]" />
+                  Zustand
+                  <span className="rounded-full bg-lime/15 px-1.5 py-0.5 text-[9px] font-bold text-lime">
+                    {t('ui.newBadge')}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Reveal>
         </div>
-      )}
-    </>
+
+        <Reveal delay={450} className="mt-16 hidden items-center gap-3 text-muted lg:flex">
+          <span className="mono-label">{t('hero.scroll')}</span>
+          <span className="relative h-px w-24 overflow-hidden bg-line">
+            <span className="absolute inset-y-0 start-0 w-8 animate-marquee bg-gradient-to-r from-transparent via-accent to-transparent" />
+          </span>
+        </Reveal>
+      </div>
+    </section>
   );
-};
-
-export default Hero;
+}
