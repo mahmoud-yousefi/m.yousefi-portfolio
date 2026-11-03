@@ -25,7 +25,7 @@ export const socials: { key: SocialKey; label: string; handle: string; url: stri
 ];
 
 export const headlineStats = [
-  { key: 'years', value: 2, suffix: '+' },
+  { key: 'years', value: 6, suffix: '+' },
   { key: 'projects', value: 15, suffix: '+' },
   { key: 'tech', value: 30, suffix: '+' },
   { key: 'degrees', value: 2, suffix: '' },
